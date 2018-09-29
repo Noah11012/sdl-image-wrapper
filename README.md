@@ -1,1 +1,71 @@
-# SDLImageWrapper
+# SDL Image Wrapper
+SDLImageWrapper is a C++ wrapper around `SDL_Texture` for ease of rendering in SDL2.
+
+## Quick Start
+
+### Build
+
+You will need SDL2 and SDL2_image to build and use this library. This library contains only a header and a source file. Simply include the header file and add the source file to the list of files to be built.
+
+For example, if you have clang++ installed:
+
+```clang++ -o program main.cpp other_file.cpp `sdl2-config --cflags --libs` -lSDL2_image```
+
+In `other_file.cpp`:
+
+```c
+#include "sdl-image-wrapper.hpp"
+
+...
+```
+
+Of course, if you were using a build system generator like CMake you can just add the source file to the list of files for a target.
+
+### Usage
+
+When using SDLImageWrapper you must ensure that SDL2 is initialized and that also SDL2_image is initialized.
+
+```c
+#include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include "sdl-image-wrapper.hpp"
+
+int main()
+{
+    SDL_Init(SDL_INIT_VIDEO);
+    IMG_Init(IMG_INIT_PNG);
+
+    SDL_Window *window = SDL_CreateWindow("A simple window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    1280, 720);
+
+    SDL_Renderer *renderer = SDL_CreateRenderer(window);
+
+    SDLImageWrapper image(renderer, "test_image.png", 0, 0);
+
+    /* Get width and height of image */
+    std::cout << "Width: " << image.get_width() << "\n";
+    std::cout << "Height: " << image.get_height() << "\n";
+
+    SDL_Event event;
+    bool keep_window_open = true;
+    int x_position = 0;
+    while(SDL_PollEvent(&event) || keep_window_open)
+    {
+        if(event.type == SDL_QUIT)
+            keep_window_open = false;
+        
+        /* Animate the image's position across the x-axis */
+        image.set_position(i, 0);
+
+        /* Render image to the screen */
+        image.render_image();
+
+        i++;
+    }
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+}
+```
+
