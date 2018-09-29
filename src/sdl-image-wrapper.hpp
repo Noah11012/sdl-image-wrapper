@@ -22,6 +22,7 @@ public:
     ~SDLImageWrapper();
 
     void open_image(SDL_Renderer *renderer, const std::string &image_name, int x, int y);
+    void render_image();
 
     void set_renderer(SDL_Renderer *renderer) { m_renderer = renderer; }
 
@@ -42,8 +43,6 @@ public:
 
     int &get_height() { return m_image_location.h; }
     int const &get_height() const { return m_image_location.h; }
-
-    void render_image();
 
 private:
     SDL_Renderer *m_renderer;
