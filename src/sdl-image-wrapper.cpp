@@ -1,6 +1,6 @@
 #include "sdl-image-wrapper.hpp"
 
-SDLImageWrapperException::SDLImageWrapperException(std::string const &message): m_message(message)
+SDLImageWrapperException::SDLImageWrapperException(std::string message): m_message(std::move(message))
 {
 
 }

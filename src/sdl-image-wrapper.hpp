@@ -7,7 +7,7 @@
 class SDLImageWrapperException: std::exception
 {
 public:
-    SDLImageWrapperException(std::string const &message);
+    explicit SDLImageWrapperException(std::string message);
     char const *what() { return m_message.c_str(); }
 
 private:
