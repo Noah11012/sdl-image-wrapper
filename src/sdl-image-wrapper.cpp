@@ -12,14 +12,16 @@ SDLImageWrapper::SDLImageWrapper(): m_renderer(nullptr),
 
 }
 
-SDLImageWrapper::SDLImageWrapper(SDL_Renderer *renderer, std::string const &image, int x, int y): m_renderer(renderer),
-                                                                                                  m_image(nullptr),
-                                                                                                  m_image_location{0, 0, 0, 0}
+SDLImageWrapper::SDLImageWrapper(SDL_Renderer *renderer, std::string const &image_name, int x, int y): m_renderer(renderer),
+                                                                                                       m_image(nullptr),
+                                                                                                       m_image_location{0, 0, 0, 0}
 {
-    SDL_Surface *image_surface = IMG_Load(image.c_str());
+    SDL_Surface *image_surface = IMG_Load(image_name.c_str());
 
     if(!image_surface)
     {
+        throw SDLImageWrapperException(std::string("Failed to load image ") + image_name + "\n"
+                                       "SDL2 Error: " + SDL_GetError() + "\n");
     }
 
     m_image = SDL_CreateTextureFromSurface(renderer, image_surface);
@@ -55,6 +57,8 @@ void SDLImageWrapper::open_image(SDL_Renderer *renderer, const std::string &imag
 
     if(!image_surface)
     {
+        throw SDLImageWrapperException(std::string("Failed to load image") + image_name + "\n"
+                                       "SDL2 Error: " + SDL_GetError() + "\n");
     }
 
     m_image = SDL_CreateTextureFromSurface(renderer, image_surface);
