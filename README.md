@@ -23,7 +23,7 @@ Of course, if you were using a build system generator like CMake you can just ad
 
 ### Usage
 
-When using SDLImageWrapper you must ensure that SDL2 is initialized and that also SDL2_image is initialized.
+When using SDLImageWrapper you must ensure that SDL2 is initialized and that also SDL2_image is initialized. The constructor and `open_image()` will throw an `SDLImageWrapperException` if an error occurred. If a call to `render_image()` results in an error, an `SDLImageWrapperException` will also be thrown.
 
 ```c
 #include <iostream>
@@ -33,15 +33,21 @@ When using SDLImageWrapper you must ensure that SDL2 is initialized and that als
 
 int main()
 {
-    SDL_Init(SDL_INIT_VIDEO);
-    IMG_Init(IMG_INIT_PNG);
+    if(SDL_Init(SDL_INIT_VIDEO) < 0)
+        return -1;
+
+    if(!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)
+        return -1;
 
     SDL_Window *window = SDL_CreateWindow("A simple window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
     1280, 720);
 
     SDL_Renderer *renderer = SDL_CreateRenderer(window);
 
-    SDLImageWrapper image(renderer, "test_image.png", 0, 0);
+    try
+        SDLImageWrapper image(renderer, "test_image.png", 0, 0);
+    catch(SDLImageWrapperException &image_exception)
+        std::cout << sdl_exception.what() << "\n";
 
     /* Get width and height of image */
     std::cout << "Width: " << image.get_width() << "\n";
@@ -58,8 +64,11 @@ int main()
         /* Animate the image's position across the x-axis */
         image.set_position(i, 0);
 
-        /* Render image to the screen */
-        image.render_image();
+        /* Render the image to the screen */
+        try
+            image.render_image();
+        catch(SDLImageWrapperException &image_exception)
+            std::cout << sdl_exception.what() << "\n";
 
         i++;
     }

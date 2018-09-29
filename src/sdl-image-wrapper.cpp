@@ -74,5 +74,7 @@ void SDLImageWrapper::open_image(SDL_Renderer *renderer, const std::string &imag
 
 void SDLImageWrapper::render_image()
 {  
-    SDL_RenderCopy(m_renderer, m_image, nullptr, &m_image_location);
+    if(SDL_RenderCopy(m_renderer, m_image, nullptr, &m_image_location) != 0)
+        throw SDLImageWrapperException(std::string("Could not render SDL_Texture") + "\n"
+                                                    "SDL2 Error: " + SDL_GetError() + "\n");
 }
