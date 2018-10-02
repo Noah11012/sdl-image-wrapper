@@ -6,14 +6,16 @@ SDLImageWrapperException::SDLImageWrapperException(std::string message): m_messa
 }
 
 SDLImageWrapper::SDLImageWrapper(): m_renderer(nullptr),
-                              m_image(nullptr),
-                              m_image_location{0, 0, 0, 0}
+                                    m_image(nullptr),
+                                    m_degrees(0.0),
+                                    m_image_location{0, 0, 0, 0}
 {
 
 }
 
 SDLImageWrapper::SDLImageWrapper(SDL_Renderer *renderer, std::string const &image_name, int x, int y): m_renderer(renderer),
                                                                                                        m_image(nullptr),
+                                                                                                       m_degrees(0.0),
                                                                                                        m_image_location{0, 0, 0, 0}
 {
     SDL_Surface *image_surface = IMG_Load(image_name.c_str());
@@ -49,6 +51,14 @@ void SDLImageWrapper::move(int add_x, int add_y)
 {
     m_image_location.x += add_x;
     m_image_location.y += add_y;
+}
+
+void SDLImageWrapper::rotate(double degrees)
+{
+    if(m_degrees + degrees > 360.0)
+        m_degrees = 0;
+    
+    m_degrees += degrees;
 }
 
 void SDLImageWrapper::open_image(SDL_Renderer *renderer, const std::string &image_name, int x, int y)

@@ -32,6 +32,8 @@ public:
     void set_position(int new_x, int new_y);
     void move(int add_x, int add_y);
 
+    void rotate(double degrees);
+
     int &get_x() { return m_image_location.x; }
     int const &get_x() const { return m_image_location.x; }
 
@@ -45,6 +47,8 @@ public:
     int const &get_height() const { return m_image_location.h; }
 
 private:
+    double m_degrees;
+
     SDL_Renderer *m_renderer;
     SDL_Texture *m_image;
     SDL_Rect m_image_location;

@@ -64,6 +64,9 @@ int main()
         /* Animate the image's position across the x-axis */
         image.set_position(i, 0);
 
+        /* Rotate the image an i'th degree every frame */
+        image.rotate(i);
+
         /* Render the image to the screen */
         try
             image.render_image();
