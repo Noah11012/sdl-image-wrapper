@@ -53,6 +53,11 @@ int main()
     std::cout << "Width: " << image.get_width() << "\n";
     std::cout << "Height: " << image.get_height() << "\n";
 
+    /* Flip the image because we can */
+    image.flip(SDL::FlipType::Horizontal)
+
+    /* Other options includue SDL::FlipType::None and SDL::FlipType::Vertical */
+
     SDL_Event event;
     bool keep_window_open = true;
     int x_position = 0;

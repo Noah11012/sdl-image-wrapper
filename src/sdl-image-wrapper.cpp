@@ -8,6 +8,7 @@ SDLImageWrapperException::SDLImageWrapperException(std::string message): m_messa
 SDLImageWrapper::SDLImageWrapper(): m_renderer(nullptr),
                                     m_image(nullptr),
                                     m_degrees(0.0),
+                                    m_flip_type(FlipType::None),
                                     m_image_location{0, 0, 0, 0}
 {
 
@@ -16,6 +17,7 @@ SDLImageWrapper::SDLImageWrapper(): m_renderer(nullptr),
 SDLImageWrapper::SDLImageWrapper(SDL_Renderer *renderer, std::string const &image_name, int x, int y): m_renderer(renderer),
                                                                                                        m_image(nullptr),
                                                                                                        m_degrees(0.0),
+                                                                                                       m_flip_type(FlipType::None),
                                                                                                        m_image_location{0, 0, 0, 0}
 {
     SDL_Surface *image_surface = IMG_Load(image_name.c_str());
@@ -61,6 +63,11 @@ void SDLImageWrapper::rotate(double degrees)
     m_degrees += degrees;
 }
 
+void SDLImageWrapper::flip(FlipType flip_type)
+{
+    m_flip_type = flip_type;
+}
+
 void SDLImageWrapper::open_image(SDL_Renderer *renderer, const std::string &image_name, int x, int y)
 {
     SDL_Surface *image_surface = IMG_Load(image_name.c_str());
@@ -83,8 +90,16 @@ void SDLImageWrapper::open_image(SDL_Renderer *renderer, const std::string &imag
 }
 
 void SDLImageWrapper::render_image()
-{  
-    if(SDL_RenderCopy(m_renderer, m_image, nullptr, &m_image_location) != 0)
+{
+    SDL_RendererFlip flip_type = SDL_FLIP_NONE;
+
+    if(flip_type == static_cast<int>(FlipType::Horizontal))
+        flip_type = SDL_FLIP_HORIZONTAL;
+    
+    if(flip_type == static_cast<int>(FlipType::Vertical))
+        flip_type = SDL_FLIP_VERTICAL;
+
+    if(SDL_RenderCopyEx(m_renderer, m_image, nullptr, &m_image_location, m_degrees, nullptr, flip_type) != 0)
         throw SDLImageWrapperException(std::string("Could not render SDL_Texture") + "\n"
                                                     "SDL2 Error: " + SDL_GetError() + "\n");
 }

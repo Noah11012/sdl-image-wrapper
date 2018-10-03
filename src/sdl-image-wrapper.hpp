@@ -17,6 +17,13 @@ private:
 class SDLImageWrapper
 {
 public:
+    enum class FlipType
+    {
+        None,
+        Horizontal,
+        Vertical
+    };
+
     SDLImageWrapper();
     SDLImageWrapper(SDL_Renderer *renderer, std::string const &image_name, int x, int y);
     ~SDLImageWrapper();
@@ -33,6 +40,7 @@ public:
     void move(int add_x, int add_y);
 
     void rotate(double degrees);
+    void flip(FlipType flip_type);
 
     int &get_x() { return m_image_location.x; }
     int const &get_x() const { return m_image_location.x; }
@@ -48,6 +56,7 @@ public:
 
 private:
     double m_degrees;
+    FlipType m_flip_type;
 
     SDL_Renderer *m_renderer;
     SDL_Texture *m_image;
