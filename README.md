@@ -54,7 +54,7 @@ int main()
     std::cout << "Height: " << image.get_height() << "\n";
 
     /* Flip the image because we can */
-    image.flip(SDL::FlipType::Horizontal)
+    image.flip(SDLImageWrapper::FlipType::Horizontal)
 
     /* Other options includue SDL::FlipType::None and SDL::FlipType::Vertical */
 
