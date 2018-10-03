@@ -93,13 +93,7 @@ void SDLImageWrapper::render_image()
 {
     SDL_RendererFlip flip_type = SDL_FLIP_NONE;
 
-    if(flip_type == static_cast<int>(FlipType::Horizontal))
-        flip_type = SDL_FLIP_HORIZONTAL;
-    
-    if(flip_type == static_cast<int>(FlipType::Vertical))
-        flip_type = SDL_FLIP_VERTICAL;
-
-    if(SDL_RenderCopyEx(m_renderer, m_image, nullptr, &m_image_location, m_degrees, nullptr, flip_type) != 0)
+    if(SDL_RenderCopyEx(m_renderer, m_image, nullptr, &m_image_location, m_degrees, nullptr, static_cast<SDL_RendererFlip>(m_flip_type)) != 0)
         throw SDLImageWrapperException(std::string("Could not render SDL_Texture") + "\n"
                                                     "SDL2 Error: " + SDL_GetError() + "\n");
 }
